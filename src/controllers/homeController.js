@@ -28,9 +28,20 @@ let postCRUD = async (req, res) => {
     // return res.render('port-crud.ejs');
 }  
 
+let dislayGetCRUD = async (req, res) => {
+    let data = await CRUDService.getAllUser();
+    console.log('----------------------------');
+    console.log(data);
+    console.log('----------------------------');
+    return res.render('dislayCRUD.ejs', {
+        dataTable: data
+    });
+}
+
 module.exports = {
     getHomePage: getHomePage,
     getAboutPage: getAboutPage,
     getCRUD: getCRUD,
     postCRUD: postCRUD,
+    dislayGetCRUD: dislayGetCRUD,
 }
