@@ -6,22 +6,17 @@ let router = express.Router();
 
 let initWebRoutes = (app) => {
     router.get("/", homeController.getHomePage);
-
     router.get('/about', homeController.getAboutPage);
-
     router.get('/crud', homeController.getCRUD);
-
     router.post('/post-crud', homeController.postCRUD);
-
     router.get('/get-crud', homeController.dislayGetCRUD);
-
     router.get('/edit-crud', homeController.getEditCRUD);
-
     router.post('/put-crud', homeController.putCRUD);
-
     router.get('/delete-crud', homeController.deleteCRUD);
+    
 
     router.post('/api/login', userContrller.handleLogin);
+    router.get('/api/get-all-users', userContrller.handleGetAllUsers);
 
     return app.use("/", router);
 }
