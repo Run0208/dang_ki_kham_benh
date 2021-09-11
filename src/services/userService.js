@@ -132,7 +132,8 @@ let createNewUser = (data) => {
                     phoneNumber: data.phoneNumber,
                     gender: data.gender,
                     roleId: data.roleId,
-                    positionId: data.positionId
+                    positionId: data.positionId,
+                    image: data.avatar
                 });
     
                 resolve({
@@ -190,6 +191,9 @@ let updateUserData = (data) => {
                 user.roleId = data.roleId;
                 user.positionId = data.positionId;
                 user.gender = data.gender;
+                if(data.avatar) {
+                    user.image = data.avatar;
+                }
 
                 await user.save();
                 resolve({
@@ -209,10 +213,10 @@ let updateUserData = (data) => {
     })
 }
 
-let getAllCodeService = (tyoeInput) => {
+let getAllCodeService = (typeInput) => {
     return new Promise ( async (resolve, reject) => {
         try {
-            if(!tyoeInput) {
+            if(!typeInput) {
                 resolve({
                     errCode: 1,
                     errMessage: 'Missing required parameters !!!'
@@ -221,7 +225,7 @@ let getAllCodeService = (tyoeInput) => {
             else {
                 let res = {};
                 let allcode = await db.Allcode.findAll({
-                    where: { type: tyoeInput }
+                    where: { type: typeInput }
                 });
                 res.errCode = 0;
                 res.data = allcode;
