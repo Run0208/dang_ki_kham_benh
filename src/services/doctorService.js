@@ -58,16 +58,24 @@ let saveDetailInforDoctor = (data) => {
     return new Promise( async (resolve, reject) => {
         try {
             if( 
-                !data.doctorId ||
-                !data.contentHTML ||
-                !data.contentMarkdown || 
-                !data.action    
+                !data.doctorId 
+                || !data.contentHTML 
+                || !data.contentMarkdown 
+                || !data.action 
+                || !data.selectedPrice 
+                || !data.selectedPayment 
+                || !data.selectedProvince 
+                || !data.nameClinic 
+                || !data.addressClinic 
+                || !data.note
             ) {
                 resolve({
                     errCode: 1,
                     errMessage: 'Missing parameter'
                 })
             } else {
+
+                // Insert to Markdown
                 if (data.action === 'CREATE') {
                     await db.Markdown.create({
                         contentHTML: data.contentHTML,
@@ -90,6 +98,37 @@ let saveDetailInforDoctor = (data) => {
                     }
                 }
 
+
+                // Insert to Doctor_Infor
+                let doctorInfor = await db.Doctor_Infor.findOne({
+                    where: {
+                        doctorId: data.doctorId
+                    },
+                    raw: false
+                })
+
+                if(doctorInfor) {
+                    // update
+                    doctorInfor.doctorId = data.doctorId;
+                    doctorInfor.priceId = data.selectedPrice;
+                    doctorInfor.paymentId = data.selectedPayment;
+                    doctorInfor.provinceId = data.selectedProvince;
+                    doctorInfor.addressClinic = data.addressClinic;
+                    doctorInfor.nameClinic = data.nameClinic;
+                    doctorInfor.note = data.note;
+                    await doctorInfor.save();
+                } else {
+                    // create
+                    await db.Doctor_Infor.create({
+                        doctorId: data.doctorId,
+                        priceId: data.selectedPrice,
+                        paymentId: data.selectedPayment,
+                        provinceId: data.selectedProvince,
+                        addressClinic: data.addressClinic,
+                        nameClinic: data.nameClinic,
+                        note: data.note
+                    })
+                } 
 
                 resolve({
                     errCode: 0,
