@@ -1,5 +1,6 @@
 import db from '../models/index';
 require('dotenv').config();
+import emailService from './emailService';
 
 let postBookAppointment = (data) => {
     return new Promise ( async (resolve, reject) => {
@@ -8,13 +9,22 @@ let postBookAppointment = (data) => {
                 !data.email || 
                 !data.doctorId ||
                 !data.date ||
-                !data.timeType
+                !data.timeType ||
+                !data.fullName
             ) { 
                 resolve({
                     errCode: 1,
                     errMessage: 'Missing required parameter !',
                 })
             } else {
+                await emailService.sendSimpleEmail({
+                    reciverEmail: data.email,
+                    patientName: data.fullName,
+                    time: data.timeString,
+                    doctorName: data.doctorName,
+                    language: data.language,
+                    redirectLink: 'https://www.facebook.com/tobi0208/'
+                });
 
                 // insert patient
                 let user = await db.User.findOrCreate({

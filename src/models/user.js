@@ -11,10 +11,19 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+
+      // 1 user - n allcode
       User.belongsTo(models.Allcode, { foreignKey: 'positionId', targetKey: 'keyMap', as: 'positionData' })
       User.belongsTo(models.Allcode, { foreignKey: 'gender', targetKey: 'keyMap', as: 'genderData' })
+
+      // 1 user - 1 markdown
       User.hasOne(models.Markdown, { foreignKey: 'doctorId' })
+      // 1 user - 1 doctor_infor
       User.hasOne(models.Doctor_Infor, { foreignKey: 'doctorId' })
+
+
+      // 1 user n schedule
+      User.hasMany(models.Schedule, { foreignKey: 'doctorId', as: 'doctorIdData' })
     }
   };
   User.init({
