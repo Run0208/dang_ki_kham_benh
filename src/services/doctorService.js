@@ -167,7 +167,7 @@ let saveDetailInforDoctor = (data) => {
     })
 }
 
-let getDetailDoctor = (inputId) => {
+let getDetailDoctorById = (inputId) => {
     return new Promise ( async (resolve, reject) => {
         try {
             if(!inputId){
@@ -323,7 +323,7 @@ let getScheduleByDate = (doctorId, date) => {
     })
 }
 
-let getExtraInforDoctor = (doctorId) => {
+let getExtraInforDoctorById = (doctorId) => {
     return new Promise (async (resolve, reject) =>{
         try {
             if(!doctorId) {
@@ -371,7 +371,7 @@ let getExtraInforDoctor = (doctorId) => {
     })
 }
 
-let getProfileDoctor = (inputId) => {
+let getProfileDoctorById = (inputId) => {
     return new Promise (async (resolve, reject) =>{
         try {
             if(!inputId) {
@@ -445,10 +445,10 @@ module.exports = {
     getTopDoctorHome: getTopDoctorHome,
     getAllDoctors: getAllDoctors,
     saveDetailInforDoctor: saveDetailInforDoctor,
-    getDetailDoctor: getDetailDoctor,
+    getDetailDoctorById: getDetailDoctorById,
     bulkCreateSchedule: bulkCreateSchedule,
     getScheduleByDate: getScheduleByDate,
-    getExtraInforDoctor: getExtraInforDoctor,
-    getProfileDoctor: getProfileDoctor,
+    getExtraInforDoctorById: getExtraInforDoctorById,
+    getProfileDoctorById: getProfileDoctorById,
 
 }

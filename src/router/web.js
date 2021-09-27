@@ -29,11 +29,11 @@ let initWebRoutes = (app) => {
     router.get('/api/top-doctor-home', doctorController.getTopDoctorHome);
     router.get('/api/get-all-doctors', doctorController.getAllDoctors);
     router.post('/api/save-infor-doctor', doctorController.postInforDoctor);
-    router.get('/api/get/detail-doctor-by-id', doctorController.getDetailDoctor);
+    router.get('/api/get/detail-doctor-by-id', doctorController.getDetailDoctorById);
     router.post('/api/create-schedule', doctorController.bulkCreateSchedule);
     router.get('/api/get-schedule-doctor-by-date', doctorController.getScheduleByDate);
-    router.get('/api/get-extra_infor-doctor-by-id', doctorController.getExtraInforDoctor);
-    router.get('/api/get-profile-doctor-by-id', doctorController.getProfileDoctor);
+    router.get('/api/get-extra_infor-doctor-by-id', doctorController.getExtraInforDoctorById);
+    router.get('/api/get-profile-doctor-by-id', doctorController.getProfileDoctorById);
 
 
     router.post('/api/patient-book-appointment', patientController.postBookAppointment);
@@ -42,8 +42,7 @@ let initWebRoutes = (app) => {
 
     router.post('/api/create-new-specialty', specialtyController.createNewSpecialty);
     router.get('/api/get-all-specialty', specialtyController.getAllSpecialty);
-
-
+    router.get('/api/get-detail-specialty-by-id', specialtyController.getDetailSpecialtyById);
 
     return app.use("/", router);
 }
