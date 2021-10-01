@@ -16,7 +16,11 @@ let postBookAppointment = (data) => {
                 !data.doctorId ||
                 !data.date ||
                 !data.timeType ||
-                !data.fullName
+                !data.fullName ||
+                !data.selectedGenders ||
+                !data.address ||
+                !data.phoneNumber
+
             ) { 
                 resolve({
                     errCode: 1,
@@ -36,11 +40,16 @@ let postBookAppointment = (data) => {
                 });
 
                 // insert patient
-                let user = await db.User.findOrCreate({
+                let user = await db.Patient.findOrCreate({
                     where: { email: data.email },
                     defaults: {
                         email: data.email,
-                        roleId: 'R3'
+                        roleId: 'R3',
+                        fullName: data.fullName,
+                        phoneNumber: data.phoneNumber,
+                        address: data.address,
+                        gender: data.selectedGenders
+
                     }
                 });
                 // create a booking 

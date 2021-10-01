@@ -10,6 +10,7 @@ import clinicController from "../controllers/clinicController";
 let router = express.Router();
 
 let initWebRoutes = (app) => {
+    // ---------------- homeController ----------------
     router.get("/", homeController.getHomePage);
     router.get('/about', homeController.getAboutPage);
     router.get('/crud', homeController.getCRUD);
@@ -19,7 +20,7 @@ let initWebRoutes = (app) => {
     router.post('/put-crud', homeController.putCRUD);
     router.get('/delete-crud', homeController.deleteCRUD);
     
-
+    // ---------------- userContrller ----------------
     router.post('/api/login', userContrller.handleLogin);
     router.get('/api/get-all-users', userContrller.handleGetAllUsers);
     router.post('/api/create-new-user', userContrller.handleCreateNewUser);
@@ -27,6 +28,7 @@ let initWebRoutes = (app) => {
     router.delete('/api/delete-user', userContrller.handleDeleteUser);
     router.get('/api/allcode', userContrller.getAllCode);
     
+    // ---------------- doctorController ----------------
     router.get('/api/top-doctor-home', doctorController.getTopDoctorHome);
     router.get('/api/get-all-doctors', doctorController.getAllDoctors);
     router.post('/api/save-infor-doctor', doctorController.postInforDoctor);
@@ -35,16 +37,18 @@ let initWebRoutes = (app) => {
     router.get('/api/get-schedule-doctor-by-date', doctorController.getScheduleByDate);
     router.get('/api/get-extra_infor-doctor-by-id', doctorController.getExtraInforDoctorById);
     router.get('/api/get-profile-doctor-by-id', doctorController.getProfileDoctorById);
+    router.get('/api/get-list-patient-for-doctor', doctorController.getListPatientForDoctor);
 
-
+    // ---------------- patientController ----------------
     router.post('/api/patient-book-appointment', patientController.postBookAppointment);
     router.post('/api/verify-book-appointment', patientController.postVerifyBookAppointment);
 
-
+    // ---------------- specialtyController ----------------
     router.post('/api/create-new-specialty', specialtyController.createNewSpecialty);
     router.get('/api/get-all-specialty', specialtyController.getAllSpecialty);
     router.get('/api/get-detail-specialty-by-id', specialtyController.getDetailSpecialtyById);
-   
+
+   // ---------------- clinicController ----------------
     router.post('/api/create-new-clinic', clinicController.createNewClinic);
     router.get('/api/get-all-clinic', clinicController.getAllClinic);
     router.get('/api/get-detail-clinic-by-id', clinicController.getDetailClinicById);
