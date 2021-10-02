@@ -13,12 +13,18 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Allcode.hasMany(models.User, {foreignKey: 'positionId', as: 'positonData'})
       Allcode.hasMany(models.User, {foreignKey: 'gender', as: 'genderData'})
-      Allcode.hasMany(models.Patient, {foreignKey: 'gender', as: 'genderIdData'})
-      Allcode.hasMany(models.Schedule, {foreignKey: 'timeType', as: 'timeTypeData'})
 
       Allcode.hasMany(models.Doctor_Infor, {foreignKey: 'priceId', as: 'priceIdData'})
       Allcode.hasMany(models.Doctor_Infor, {foreignKey: 'paymentId', as: 'paymentIdData'})
       Allcode.hasMany(models.Doctor_Infor, {foreignKey: 'provinceId', as: 'provinceIdData'})
+
+      Allcode.hasMany(models.Patient, {foreignKey: 'gender', as: 'genderIdData'})
+
+      Allcode.hasMany(models.Booking, {foreignKey: 'timeType', as: 'timeTypeDataPatient'})
+
+      Allcode.hasMany(models.Schedule, {foreignKey: 'timeType', as: 'timeTypeIdData'})
+
+
     }
   };
   Allcode.init({
