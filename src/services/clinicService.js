@@ -5,6 +5,13 @@ require('dotenv').config();
 let createNewClinic = (data) => {
     return new Promise ( async (resolve, reject) => {
         try {
+            let checkName = await checkClinicName(data.name);
+            if(checkName === true) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Your name is already in used, Please try another name!!!',
+                });
+            } 
             if(
                 !data.name || 
                 !data.address ||
@@ -13,7 +20,7 @@ let createNewClinic = (data) => {
                 !data.descriptionMarkdown
             ) { 
                 resolve({
-                    errCode: 1,
+                    errCode: 2,
                     errMessage: 'Missing required parameter !',
                 })
             } else {
@@ -32,6 +39,25 @@ let createNewClinic = (data) => {
             }
         } catch(e) {
             reject(e)
+        }
+    })
+}
+
+let checkClinicName = (clinicName) => {
+    return new Promise( async (resolve, reject) => {
+        try {
+            let name = await db.Clinic.findOne({
+               where: { name: clinicName } 
+            });
+            if(name) {
+                resolve(true);
+            }
+            else {
+                resolve(false);
+            }
+        }
+        catch(e) {
+            reject(e);
         }
     })
 }
@@ -97,9 +123,75 @@ let getDetailClinicById = (inputId) => {
     })
 }
 
+let updateClinicData = (data) => {
+    return new Promise( async (resolve, reject) => {
+        try {
+            if(!data.id) {
+                resolve({
+                    errCode: 2,
+                    errMessage: 'Missing required parameters'
+                });
+            }
+            let clinic = await db.Clinic.findOne({
+                where: { id: data.id },
+                raw: false
+            });
+            if(clinic) {
+                clinic.name = data.name;
+                clinic.address = data.address;
+                clinic.descriptionHTML = data.descriptionHTML;
+                clinic.descriptionMarkdown = data.descriptionMarkdown;
+                if(data.image) {
+                    clinic.image = data.image;
+                }
+                await clinic.save();
+                resolve({
+                    errCode: 0,
+                    message: 'Update the clinic success !'
+                });
+            }else {
+                resolve({
+                    errCode: 1,
+                    errMessage: `Clinic's mot found !`
+                });
+            }
+        }
+        catch(e) {
+            reject(e);
+        }
+    })
+}
+
+let deleteClinic = (clinicId) => {
+    return new Promise ( async (resolve, reject) => {
+        let clinic = await db.Clinic.findOne({
+            where: { 
+                id: clinicId
+            }
+        });
+        if(!clinic) {
+            resolve({
+                errCode: 2,
+                message: `The clinic isn't exits`
+            })
+        }
+        await db.Clinic.destroy({
+            where: { 
+                id: clinicId
+            }
+        });
+
+        resolve({
+            errCode: 0,
+            message: `The clinic is delete`
+        })
+    });
+}
+
 module.exports = {
     createNewClinic: createNewClinic,
     getAllClinic: getAllClinic,
     getDetailClinicById: getDetailClinicById,
-
+    updateClinicData: updateClinicData,
+    deleteClinic: deleteClinic
 }

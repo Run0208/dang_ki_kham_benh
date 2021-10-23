@@ -48,11 +48,15 @@ let initWebRoutes = (app) => {
     router.get('/api/get-all-specialty', specialtyController.getAllSpecialty);
     router.get('/api/get-detail-specialty-by-id', specialtyController.getDetailSpecialtyById);
     router.post('/api/create-new-specialty', specialtyController.createNewSpecialty);
+    router.delete('/api/delete-specialty', specialtyController.handleDeleteSpecialty);
+    router.put('/api/edit-specialty', specialtyController.handleEditSpecialty);
 
    // ---------------- clinicController ----------------
    router.get('/api/get-all-clinic', clinicController.getAllClinic);
    router.get('/api/get-detail-clinic-by-id', clinicController.getDetailClinicById);
    router.post('/api/create-new-clinic', clinicController.createNewClinic);
+   router.delete('/api/delete-clinic', clinicController.handleDeleteClinic);
+   router.put('/api/edit-clinic', clinicController.handleEditClinic);
 
     return app.use("/", router);
 }

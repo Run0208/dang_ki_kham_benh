@@ -148,7 +148,10 @@ let createNewUser = (data) => {
 let deleteUser = (userId) => {
     return new Promise ( async (resolve, reject) => {
         let user = await db.User.findOne({
-            where: { id: userId }
+            where: { 
+                id: userId,
+                roleId: 'R2'
+            }
         });
         if(!user) {
             resolve({
@@ -157,7 +160,10 @@ let deleteUser = (userId) => {
             })
         }
         await db.User.destroy({
-            where: { id: userId }
+            where: { 
+                id: userId,
+                roleId: 'R2'
+            }
         });
 
         resolve({
@@ -177,7 +183,7 @@ let updateUserData = (data) => {
                 });
             }
             let user = await db.User.findOne({
-                where: {  id: data.id },
+                where: { id: data.id },
                 raw: false
             });
             if(user) {

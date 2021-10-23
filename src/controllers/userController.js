@@ -57,7 +57,7 @@ let handleDeleteUser = async (req, res) => {
         })
     }
     let message = await userService.deleteUser(req.body.id);
-    return res.status(200).json(message);
+    return res.status(200).json(message); 
 }
 
 let getAllCode = async (req, res) => {
