@@ -1,7 +1,7 @@
 import db from '../models/index';
 require('dotenv').config();
 import _ from 'lodash';
-import { sendAttachment, sendSimpleEmail } from '../services/emailService'
+import { sendAttachment, sendSimpleEmail, sendLink, sendNotificationBlocked } from '../services/emailService'
 
 
 const MAX_NUMBER_SCHEDULE = process.env.MAX_NUMBER_SCHEDULE;
@@ -222,7 +222,7 @@ let getDetailDoctorById = (inputId) => {
                 })
 
                 if(data && data.image) {
-                    data.image = new Buffer(data.image, 'base64').toString('binary');
+                    data.image = Buffer.from(data.image, 'base64').toString('binary');
                 }
 
                 if(!data) data = {};
@@ -426,7 +426,7 @@ let getProfileDoctorById = (inputId) => {
                 })
 
                 if(data && data.image) {
-                    data.image = new Buffer(data.image, 'base64').toString('binary');
+                    data.image = Buffer.from(data.image, 'base64').toString('binary');
                 }
 
                 if(!data) data = {};
@@ -453,6 +453,7 @@ let getListPatientForDoctor = (doctorId, date) => {
                 let data = await db.Booking.findAll({
                     where: {
                         statusId: 'S2',
+                        statusId: 'S3',
                         doctorId: doctorId,
                         date: date
                     },
@@ -488,7 +489,7 @@ let getListPatientForDoctor = (doctorId, date) => {
     })
 }
 
-let sendRemedy = (data) => {
+let sendOnlineClinic = (data) => {
     return new Promise (async (resolve, reject) =>{
         try {
             if(!data.email | !data.doctorId || !data.patientId || !data.timeType) {
@@ -511,9 +512,107 @@ let sendRemedy = (data) => {
                 if(appointment) {
                     appointment.statusId = 'S3'
                     await appointment.save();
+                    // Send email remedy
+                    await sendLink(data);
                 }
-                // Send email remedy
-                await sendAttachment(data);
+
+
+                resolve({
+                    errCode: 0,
+                    errMessage: 'OK'
+                })
+            }
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
+let sendBlockedNotification = (data) => {
+    return new Promise (async (resolve, reject) =>{
+        try {
+            if(!data.email | !data.doctorId || !data.patientId || !data.timeType) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Missing required parameter !'
+                })
+            } else {
+                // Update patient status
+                let appointment = await db.Booking.findOne({
+                    where: {
+                        doctorId: data.doctorId,
+                        patientId: data.patientId,
+                        timeType: data.timeType,
+                        statusId: 'S3'
+                    },
+                    raw: false
+                })
+
+                if(appointment) {
+                    appointment.statusId = 'S5'
+                    // Send email remedy
+                    await sendNotificationBlocked(data);
+
+                    await db.Block.create({
+                        patientId: appointment.patientId,
+                        email: appointment.email,
+                        doctorId: appointment.doctorId,
+                        timeType: appointment.timeType,
+                        statusId: 'S5'
+                    });
+                    await appointment.save();
+
+                }
+
+
+                resolve({
+                    errCode: 0,
+                    errMessage: 'OK'
+                })
+            }
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
+
+
+let sendRemedy = (data) => {
+    return new Promise (async (resolve, reject) =>{
+        try {
+            if(!data.email | !data.doctorId || !data.patientId || !data.timeType) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Missing required parameter !'
+                })
+            } else {
+                // Update patient status
+                let appointment = await db.Booking.findOne({
+                    where: {
+                        patientId: data.patientId,
+                        email: data.email,
+                        doctorId: data.doctorId,
+                        timeType: data.timeType,
+                        statusId: 'S3'
+                    },
+                    raw: false
+                })
+
+                if(appointment) {
+                    await db.History.create({
+                        patientId: appointment.patientId,
+                        email: appointment.email,
+                        doctorId: appointment.doctorId,
+                        timeType: appointment.timeType,
+                        statusId: 'S4'
+                    });
+
+                    await appointment.destroy();
+                    // Send email remedy
+                    await sendAttachment(data);
+                }
+
 
 
                 resolve({
@@ -539,6 +638,6 @@ module.exports = {
     getProfileDoctorById: getProfileDoctorById,
     getListPatientForDoctor: getListPatientForDoctor,
     sendRemedy: sendRemedy,
-
-
+    sendOnlineClinic: sendOnlineClinic,
+    sendBlockedNotification: sendBlockedNotification
 }

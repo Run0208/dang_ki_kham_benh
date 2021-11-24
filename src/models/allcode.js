@@ -23,10 +23,10 @@ module.exports = (sequelize, DataTypes) => {
       Allcode.hasMany(models.Booking, {foreignKey: 'timeType', as: 'timeTypeDataPatient'})
 
       Allcode.hasMany(models.Schedule, {foreignKey: 'timeType', as: 'timeTypeIdData'})
-
-
     }
   };
+
+  
   Allcode.init({
     keyMap: DataTypes.STRING,
     type: DataTypes.STRING,
