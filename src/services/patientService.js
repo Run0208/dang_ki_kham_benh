@@ -8,6 +8,23 @@ let buildUrlEmail = (doctorId, token) => {
     return result;
 }
 
+let getAllPatient = () => {
+    return new Promise ( async (resolve, reject)  => {
+        try {
+            let patients = await db.Patient.findAll({
+                where: { roleId: 'R3'}
+            });
+
+            resolve({
+                errCode: 0,
+                data: patients
+            })
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
 let postBookAppointment = (data) => {
     return new Promise ( async (resolve, reject) => {
         try {
@@ -122,6 +139,7 @@ let postVerifyBookAppointment = (data) => {
 }
 
 module.exports = {
+    getAllPatient: getAllPatient,
     postBookAppointment: postBookAppointment,
     postVerifyBookAppointment: postVerifyBookAppointment,
 

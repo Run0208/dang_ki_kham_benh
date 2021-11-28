@@ -43,6 +43,7 @@ let initWebRoutes = (app) => {
     router.post('/api/send-blocked-notification', doctorController.sendBlockedNotification);
 
     // ---------------- patientController ----------------
+    router.get('/api/get-all-patient', patientController.getAllPatient);
     router.post('/api/patient-book-appointment', patientController.postBookAppointment);
     router.post('/api/verify-book-appointment', patientController.postVerifyBookAppointment);
 
