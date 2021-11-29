@@ -41,7 +41,7 @@ let getAllDoctors = () => {
             let doctors = await db.User.findAll({
                 where: { roleId: 'R2'} ,
                 attributes: {
-                    exclude: ['password', 'image']
+                    exclude: ['password']
                 },
             });
 
@@ -441,6 +441,7 @@ let getProfileDoctorById = (inputId) => {
         }
     })
 }
+
 let getListPatientForDoctor = (doctorId, date) => {
     return new Promise (async (resolve, reject) =>{
         try {
@@ -552,7 +553,6 @@ let sendBlockedNotification = (data) => {
                     appointment.statusId = 'S5'
                     // Send email remedy
                     await sendNotificationBlocked(data);
-
                     await db.Block.create({
                         patientId: appointment.patientId,
                         email: appointment.email,
@@ -561,9 +561,7 @@ let sendBlockedNotification = (data) => {
                         statusId: 'S5'
                     });
                     await appointment.save();
-
                 }
-
 
                 resolve({
                     errCode: 0,
@@ -575,8 +573,6 @@ let sendBlockedNotification = (data) => {
         }
     })
 }
-
-
 
 let sendRemedy = (data) => {
     return new Promise (async (resolve, reject) =>{
@@ -613,13 +609,28 @@ let sendRemedy = (data) => {
                     await sendAttachment(data);
                 }
 
-
-
                 resolve({
                     errCode: 0,
                     errMessage: 'OK'
                 })
             }
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
+let getSearchDoctor = (data) => {
+    return new Promise ( async (resolve, reject)  => {
+        try {
+            let doctors = await db.User.findAll({
+                where: { firstName: data.firstName}
+            });
+
+            resolve({
+                errCode: 0,
+                data: doctors
+            })
         } catch (e) {
             reject(e);
         }
@@ -639,5 +650,6 @@ module.exports = {
     getListPatientForDoctor: getListPatientForDoctor,
     sendRemedy: sendRemedy,
     sendOnlineClinic: sendOnlineClinic,
-    sendBlockedNotification: sendBlockedNotification
+    sendBlockedNotification: sendBlockedNotification,
+    getSearchDoctor
 }

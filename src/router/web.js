@@ -6,7 +6,6 @@ import patientController from "../controllers/patientController";
 import specialtyController from "../controllers/specialtyController";
 import clinicController from "../controllers/clinicController";
 
-
 let router = express.Router();
 
 let initWebRoutes = (app) => {
@@ -29,6 +28,7 @@ let initWebRoutes = (app) => {
     router.delete('/api/delete-user', userContrller.handleDeleteUser);
     
     // ---------------- doctorController ----------------
+    router.get('/api/search-doctor', doctorController.getSearchDoctor);
     router.get('/api/top-doctor-home', doctorController.getTopDoctorHome);
     router.get('/api/get-all-doctors', doctorController.getAllDoctors);
     router.get('/api/get/detail-doctor-by-id', doctorController.getDetailDoctorById);
