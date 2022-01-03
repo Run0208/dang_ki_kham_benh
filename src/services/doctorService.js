@@ -3,7 +3,6 @@ require('dotenv').config();
 import _ from 'lodash';
 import { sendAttachment, sendSimpleEmail, sendLink, sendNotificationBlocked } from '../services/emailService'
 
-
 const MAX_NUMBER_SCHEDULE = process.env.MAX_NUMBER_SCHEDULE;
 
 let getTopDoctorHome = (limit) => {
@@ -261,6 +260,14 @@ let  bulkCreateSchedule = (data) => {
                     raw: true
                 });
 
+                //convert date
+                // if (existing && existing.length > 0) {
+                //   existing = existing.map(item => {
+                //     item.date = new Date(item.date).getTime();
+                //     return item;
+                //   })
+                // }
+
                 // compare different
                 let toCreate = _.differenceWith(schedule, existing, (a, b) => {
                     return a.timeType === b.timeType && +a.date === +b.date;
@@ -445,7 +452,7 @@ let getProfileDoctorById = (inputId) => {
 let getListPatientForDoctor = (doctorId, date) => {
     return new Promise (async (resolve, reject) =>{
         try {
-            if(!doctorId | !date) {
+            if(!doctorId || !date) {
                 resolve({
                     errCode: 1,
                     errMessage: 'Missing required parameter !'
@@ -453,10 +460,10 @@ let getListPatientForDoctor = (doctorId, date) => {
             } else {
                 let data = await db.Booking.findAll({
                     where: {
-                        statusId: 'S2',
-                        statusId: 'S3',
-                        doctorId: doctorId,
-                        date: date
+                      statusId: 'S2' || 'S3',
+                      // statusId: 'S3',
+                      doctorId: doctorId,
+                      date: date
                     },
                     include: [
                         { 
@@ -493,7 +500,7 @@ let getListPatientForDoctor = (doctorId, date) => {
 let sendOnlineClinic = (data) => {
     return new Promise (async (resolve, reject) =>{
         try {
-            if(!data.email | !data.doctorId || !data.patientId || !data.timeType) {
+            if(!data.email || !data.doctorId || !data.patientId || !data.timeType) {
                 resolve({
                     errCode: 1,
                     errMessage: 'Missing required parameter !'
@@ -532,7 +539,7 @@ let sendOnlineClinic = (data) => {
 let sendBlockedNotification = (data) => {
     return new Promise (async (resolve, reject) =>{
         try {
-            if(!data.email | !data.doctorId || !data.patientId || !data.timeType) {
+            if(!data.email || !data.doctorId || !data.patientId || !data.timeType) {
                 resolve({
                     errCode: 1,
                     errMessage: 'Missing required parameter !'
@@ -577,7 +584,7 @@ let sendBlockedNotification = (data) => {
 let sendRemedy = (data) => {
     return new Promise (async (resolve, reject) =>{
         try {
-            if(!data.email | !data.doctorId || !data.patientId || !data.timeType) {
+            if(!data.email || !data.doctorId || !data.patientId || !data.timeType) {
                 resolve({
                     errCode: 1,
                     errMessage: 'Missing required parameter !'
@@ -620,22 +627,22 @@ let sendRemedy = (data) => {
     })
 }
 
-let getSearchDoctor = (data) => {
-    return new Promise ( async (resolve, reject)  => {
-        try {
-            let doctors = await db.User.findAll({
-                where: { firstName: data.firstName}
-            });
+// let getSearchDoctor = (data) => {
+//     return new Promise ( async (resolve, reject)  => {
+//         try {
+//             let doctors = await db.User.findAll({
+//                 where: { firstName: data.firstName}
+//             });
 
-            resolve({
-                errCode: 0,
-                data: doctors
-            })
-        } catch (e) {
-            reject(e);
-        }
-    })
-}
+//             resolve({
+//                 errCode: 0,
+//                 data: doctors
+//             })
+//         } catch (e) {
+//             reject(e);
+//         }
+//     })
+// }
 
 
 module.exports = {
@@ -651,5 +658,5 @@ module.exports = {
     sendRemedy: sendRemedy,
     sendOnlineClinic: sendOnlineClinic,
     sendBlockedNotification: sendBlockedNotification,
-    getSearchDoctor
+    // getSearchDoctor
 }
