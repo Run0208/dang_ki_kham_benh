@@ -159,31 +159,17 @@ let sendBlockedNotification = async (req, res) => {
     }
 }
 
-// let getSearchDoctor = async (req, res) => {
-//     try {
-//         let infor = await doctorService.getSearchDoctor(req.query.firstName);
-//         return res.status(200).json(infor);
-//     } catch (e) {
-//         console.log(e);
-//         return res.status(200).json({
-//             errCode: -1,
-//             errMessage: 'Error from the server !'
-//         })
-//     }
-// }
-
 module.exports = {
-    getTopDoctorHome: getTopDoctorHome,
-    getAllDoctors: getAllDoctors,
-    postInforDoctor: postInforDoctor,
-    getDetailDoctorById: getDetailDoctorById,
-    bulkCreateSchedule: bulkCreateSchedule,
-    getScheduleByDate: getScheduleByDate,
-    getExtraInforDoctorById: getExtraInforDoctorById,
-    getProfileDoctorById: getProfileDoctorById,
-    getListPatientForDoctor: getListPatientForDoctor,
-    sendRemedy: sendRemedy,
-    sendOnlineClinic: sendOnlineClinic,
-    sendBlockedNotification: sendBlockedNotification,
-    // getSearchDoctor
+  getTopDoctorHome: getTopDoctorHome,
+  getAllDoctors: getAllDoctors,
+  postInforDoctor: postInforDoctor,
+  getDetailDoctorById: getDetailDoctorById,
+  bulkCreateSchedule: bulkCreateSchedule,
+  getScheduleByDate: getScheduleByDate,
+  getExtraInforDoctorById: getExtraInforDoctorById,
+  getProfileDoctorById: getProfileDoctorById,
+  getListPatientForDoctor: getListPatientForDoctor,
+  sendRemedy: sendRemedy,
+  sendOnlineClinic: sendOnlineClinic,
+  sendBlockedNotification: sendBlockedNotification,
 }

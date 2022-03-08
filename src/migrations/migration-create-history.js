@@ -11,6 +11,9 @@ module.exports = {
       patientId: {
         type: Sequelize.INTEGER
       },
+      email: {
+        type: Sequelize.STRING
+      },
       doctorId: {
         type: Sequelize.INTEGER
       },
@@ -18,6 +21,9 @@ module.exports = {
         type: Sequelize.STRING
       },
       timeType: {
+        type: Sequelize.STRING
+      },
+      diagnose: {
         type: Sequelize.STRING
       },
       createdAt: {
